@@ -45,15 +45,12 @@ public final class Response {
     public static Response create(okhttp3.Response response, String address, double duration) {
         String error = null;
         int code = response.code();
-        String reqId = null;
-        reqId = response.header("X-Reqid");
-        reqId = (reqId == null) ? null : reqId.trim();
 
         byte[] body = null;
         if (ctype(response).equals(Client.JsonMime)) {
             try {
                 body = response.body().bytes();
-                if (response.code() >= 400 && !StringUtils.isNullOrEmpty(reqId) && body != null) {
+                if (response.code() >= 400 && body != null) {
                     ErrorBody errorBody = Json.decode(new String(body), ErrorBody.class);
                     error = errorBody.error;
                 }
@@ -72,15 +69,12 @@ public final class Response {
             return new Response(null, -1, "", duration, error, null);
         }
         int code = response.code();
-        String reqId = null;
-        reqId = response.header("X-Reqid");
-        reqId = (reqId == null) ? null : reqId.trim();
 
         byte[] body = null;
         if (ctype(response).equals(Client.JsonMime)) {
             try {
                 body = response.body().bytes();
-                if (response.code() >= 400 && !StringUtils.isNullOrEmpty(reqId) && body != null) {
+                if (response.code() >= 400 && body != null) {
                     ErrorBody errorBody = Json.decode(new String(body), ErrorBody.class);
                     error = errorBody.error;
                 }
